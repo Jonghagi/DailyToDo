@@ -5,17 +5,28 @@ import java.awt.*;
  * Created by Kimjonghak on 2016. 5. 9..
  */
 public class UserInterface {
+    private final int totalWidth = 1400;
+    private final int totalHeight = 630;
+    private final int MonthWidth = 700;
     JFrame MainFrame;
     JPanel SelectMonthSection;
 
     void ShowInterFace(){
-
         MainFrame = new JFrame("DailyToDo");
-        MainFrame.setSize(500, 500);
+
+        DayofWeek weekLine;
+        weekLine = new DayofWeek();
+        weekLine.setBounds(0, 100, MonthWidth/7, 40);
+
+        MainFrame.setLayout(null);
+
+        for(int i = 0; i < 7; i++){
+            MainFrame.add(weekLine.returnContainer(i));
+        }
+        MainFrame.setSize(totalWidth, totalHeight);
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MainFrame.setVisible(true);
 
-        SelectMonthSection = new JPanel();
 
     }
 }
@@ -51,6 +62,15 @@ class DayofWeek {
 
         Container[0].setBackground(Color.red);
         Container[6].setBackground(Color.blue);
+    }
 
+    JPanel returnContainer(int index){
+        return Container[index];
+    }
+
+    void setBounds(int x, int y, int width, int height){
+        for(int i = 0; i < DayNumberOfAWeek; i++){
+            Container[i].setBounds(x + (i*width), y, width, height);
+        }
     }
 }
