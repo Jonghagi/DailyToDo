@@ -32,12 +32,6 @@ public class UserInterface {
 }
 
 
-/*
-    TODO:
-      1. Component Return
-      2. Set Size
- */
-
 class DayofWeek {
     private JLabel[] NameofDay;
     private JPanel[] Container;

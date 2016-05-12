@@ -5,6 +5,11 @@ public class DailyToDo {
     public static void main(String args[]){
         UserInterface UI;
         UI = new UserInterface();
-        UI.ShowFrame();
+        UI.ShowInterFace();
+        CalculateDate cd;
+        cd = new CalculateDate();
+        cd.Test();
+        cd.beforeMonth();
+        cd.Test();
     }
 }
