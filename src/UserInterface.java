@@ -1,12 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Kimjonghak on 2016. 5. 9..
  */
 public class UserInterface {
     private final int totalWidth = 1400;
-    private final int totalHeight = 600;
+    private final int totalHeight = 650;
     private final int MonthWidth = 700;
     CalculateDate CalendarForShow = new CalculateDate();
     JFrame MainFrame;
@@ -29,14 +31,46 @@ public class UserInterface {
         JButton beforeMonth = new JButton("<");
         JButton nextMonth = new JButton(">");
         beforeMonth.setBounds(250, 80, 50, 50);
+        beforeMonth.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CalendarForShow.beforeMonth();
+                currentMonth.setText(String.format("%02d", CalendarForShow.getCurrentMonth()));
+                showCalendar(CalendarForShow.getCalendar());
+            }
+        });
         nextMonth.setBounds(410, 80, 50, 50);
+        nextMonth.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CalendarForShow.nextMonth();
+                currentMonth.setText(String.format("%02d", CalendarForShow.getCurrentMonth()));
+                showCalendar(CalendarForShow.getCalendar());
+            }
+        });
         MainFrame.add(beforeMonth);
         MainFrame.add(nextMonth);
 
         JButton beforeYear = new JButton("<<");
         JButton nextYear = new JButton(">>");
         beforeYear.setBounds(282, 40, 25, 25);
+        beforeYear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CalendarForShow.beforeYear();
+                currentYear.setText(String.format("%04d", CalendarForShow.getCurrentYear()));
+                showCalendar(CalendarForShow.getCalendar());
+            }
+        });
         nextYear.setBounds(395, 40, 25, 25);
+        nextYear.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CalendarForShow.nextYear();
+                currentYear.setText(String.format("%04d", CalendarForShow.getCurrentYear()));
+                showCalendar(CalendarForShow.getCalendar());
+            }
+        });
         MainFrame.add(nextYear);
         MainFrame.add(beforeYear);
 
@@ -50,18 +84,20 @@ public class UserInterface {
             MainFrame.add(weekLine.getContainer(i));
         }
 
+        drawCalendar = new drawCalendar();
         showCalendar(CalendarForShow.getCalendar());
+
+
         MainFrame.setSize(totalWidth, totalHeight);
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MainFrame.setVisible(true);
     }
 
     public void showCalendar(int[][] calendar){
-        drawCalendar = new drawCalendar();
         drawCalendar.setClickableCalendar(calendar);
         drawCalendar.setBounds(0, 190, MonthWidth/7, 70);
 
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < 6; i++){
             for(int j = 0; j < 7; j++){
                 MainFrame.add(drawCalendar.getClickableDate(i, j));
             }
@@ -112,8 +148,8 @@ class drawCalendar{
     private JButton[][] ClickableCalendar;
 
     drawCalendar(){
-        ClickableCalendar = new JButton[5][7];
-        for(int i = 0; i < 5; i++){
+        ClickableCalendar = new JButton[6][7];
+        for(int i = 0; i < 6; i++){
             for(int j = 0; j < 7; j++){
                 ClickableCalendar[i][j] = new JButton();
             }
@@ -121,17 +157,19 @@ class drawCalendar{
     }
 
     public void setClickableCalendar(int[][] currentMonth){
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < 6; i++){
             for(int j = 0; j < 7; j++){
                 if(currentMonth[i][j] != 0) {
                     ClickableCalendar[i][j].setText(String.valueOf(currentMonth[i][j]));
+                } else {
+                    ClickableCalendar[i][j].setText("");
                 }
             }
         }
     }
 
     void setBounds(int x, int y, int width, int height){
-        for(int i = 0; i < 5; i++){
+        for(int i = 0; i < 6; i++){
             for(int j = 0; j < 7; j++) {
                 ClickableCalendar[i][j].setBounds(x + (j * width), y + (i * height), width, height);
             }
