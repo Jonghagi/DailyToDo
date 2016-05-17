@@ -6,27 +6,66 @@ import java.awt.*;
  */
 public class UserInterface {
     private final int totalWidth = 1400;
-    private final int totalHeight = 630;
+    private final int totalHeight = 600;
     private final int MonthWidth = 700;
+    CalculateDate CalendarForShow = new CalculateDate();
     JFrame MainFrame;
-    JPanel SelectMonthSection;
+    JLabel currentMonth;
+    JLabel currentYear;
+    drawCalendar drawCalendar;
 
     void ShowInterFace(){
         MainFrame = new JFrame("DailyToDo");
 
+        currentMonth = new JLabel(String.format("%02d", CalendarForShow.getCurrentMonth()));
+        currentMonth.setFont(new Font(null, 0, 60));
+        currentMonth.setBounds(315, 50, 100, 100);
+        currentYear = new JLabel(String.format("%04d", CalendarForShow.getCurrentYear()));
+        currentYear.setFont(new Font(null, 0, 20));
+        currentYear.setBounds(327, 0, 100, 100);
+        MainFrame.add(currentMonth);
+        MainFrame.add(currentYear);
+
+        JButton beforeMonth = new JButton("<");
+        JButton nextMonth = new JButton(">");
+        beforeMonth.setBounds(250, 80, 50, 50);
+        nextMonth.setBounds(410, 80, 50, 50);
+        MainFrame.add(beforeMonth);
+        MainFrame.add(nextMonth);
+
+        JButton beforeYear = new JButton("<<");
+        JButton nextYear = new JButton(">>");
+        beforeYear.setBounds(282, 40, 25, 25);
+        nextYear.setBounds(395, 40, 25, 25);
+        MainFrame.add(nextYear);
+        MainFrame.add(beforeYear);
+
         DayofWeek weekLine;
         weekLine = new DayofWeek();
-        weekLine.setBounds(0, 100, MonthWidth/7, 40);
+        weekLine.setBounds(0, 150, MonthWidth/7, 40);
 
         MainFrame.setLayout(null);
 
         for(int i = 0; i < 7; i++){
-            MainFrame.add(weekLine.returnContainer(i));
+            MainFrame.add(weekLine.getContainer(i));
         }
+
+        showCalendar(CalendarForShow.getCalendar());
         MainFrame.setSize(totalWidth, totalHeight);
         MainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MainFrame.setVisible(true);
+    }
 
+    public void showCalendar(int[][] calendar){
+        drawCalendar = new drawCalendar();
+        drawCalendar.setClickableCalendar(calendar);
+        drawCalendar.setBounds(0, 190, MonthWidth/7, 70);
+
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < 7; j++){
+                MainFrame.add(drawCalendar.getClickableDate(i, j));
+            }
+        }
 
     }
 }
@@ -58,7 +97,7 @@ class DayofWeek {
         Container[6].setBackground(Color.blue);
     }
 
-    JPanel returnContainer(int index){
+    JPanel getContainer(int index){
         return Container[index];
     }
 
@@ -66,5 +105,40 @@ class DayofWeek {
         for(int i = 0; i < DayNumberOfAWeek; i++){
             Container[i].setBounds(x + (i*width), y, width, height);
         }
+    }
+}
+
+class drawCalendar{
+    private JButton[][] ClickableCalendar;
+
+    drawCalendar(){
+        ClickableCalendar = new JButton[5][7];
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < 7; j++){
+                ClickableCalendar[i][j] = new JButton();
+            }
+        }
+    }
+
+    public void setClickableCalendar(int[][] currentMonth){
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < 7; j++){
+                if(currentMonth[i][j] != 0) {
+                    ClickableCalendar[i][j].setText(String.valueOf(currentMonth[i][j]));
+                }
+            }
+        }
+    }
+
+    void setBounds(int x, int y, int width, int height){
+        for(int i = 0; i < 5; i++){
+            for(int j = 0; j < 7; j++) {
+                ClickableCalendar[i][j].setBounds(x + (j * width), y + (i * height), width, height);
+            }
+        }
+    }
+
+    JButton getClickableDate(int indexX, int indexY){
+        return ClickableCalendar[indexX][indexY];
     }
 }
