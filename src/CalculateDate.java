@@ -32,6 +32,7 @@ public class CalculateDate {
             calendar.set(Calendar.MONTH, month);
             StartDay = calendar.get(Calendar.DAY_OF_WEEK);
         }
+
     }
 
     public void beforeYear(){
@@ -55,7 +56,7 @@ public class CalculateDate {
     }
 
     public int[][] getCalendar(){
-        final int maxWeek = 5;
+        final int maxWeek = 6;
         final int DaysinWeek = 7;
         int DaysinMonth;
         DaysinMonth = calendar.getActualMaximum(Calendar.DATE);
