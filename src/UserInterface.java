@@ -15,6 +15,8 @@ public class UserInterface {
     JLabel currentMonth;
     JLabel currentYear;
     drawCalendar drawCalendar;
+    JButton SaveButton;
+    JTextArea ToDoList;
 
     void ShowInterFace(){
         MainFrame = new JFrame("DailyToDo");
@@ -86,6 +88,14 @@ public class UserInterface {
 
         drawCalendar = new drawCalendar();
         showCalendar(CalendarForShow.getCalendar());
+
+        SaveButton = new JButton("Save");
+        SaveButton.setBounds(totalWidth - 110, 50, 100, 50);
+        MainFrame.add(SaveButton);
+
+        ToDoList = new JTextArea();
+        ToDoList.setBounds(MonthWidth + 20, 110, totalWidth - MonthWidth - 30, totalHeight - 150);
+        MainFrame.add(ToDoList);
 
 
         MainFrame.setSize(totalWidth, totalHeight);
