@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 /**
  * Created by Kimjonghak on 2016. 5. 9..
@@ -10,6 +11,7 @@ public class UserInterface {
     private final int totalWidth = 1400;
     private final int totalHeight = 650;
     private final int MonthWidth = 700;
+    String currentDate;
     CalculateDate CalendarForShow = new CalculateDate();
     JFrame MainFrame;
     JLabel currentMonth;
@@ -17,6 +19,7 @@ public class UserInterface {
     drawCalendar drawCalendar;
     JButton SaveButton;
     JTextArea ToDoList;
+    Record record = new Record();
 
     void ShowInterFace(){
         MainFrame = new JFrame("DailyToDo");
@@ -61,6 +64,7 @@ public class UserInterface {
             public void actionPerformed(ActionEvent e) {
                 CalendarForShow.beforeYear();
                 currentYear.setText(String.format("%04d", CalendarForShow.getCurrentYear()));
+
                 showCalendar(CalendarForShow.getCalendar());
             }
         });
@@ -70,6 +74,7 @@ public class UserInterface {
             public void actionPerformed(ActionEvent e) {
                 CalendarForShow.nextYear();
                 currentYear.setText(String.format("%04d", CalendarForShow.getCurrentYear()));
+
                 showCalendar(CalendarForShow.getCalendar());
             }
         });
@@ -91,6 +96,17 @@ public class UserInterface {
 
         SaveButton = new JButton("Save");
         SaveButton.setBounds(totalWidth - 110, 50, 100, 50);
+        SaveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try{
+                    record.WriteMemo(currentDate, ToDoList.getText());
+                } catch (IOException exception){
+                    System.out.println("Error!");
+                }
+            }
+        });
+
         MainFrame.add(SaveButton);
 
         ToDoList = new JTextArea();
@@ -110,6 +126,19 @@ public class UserInterface {
         for(int i = 0; i < 6; i++){
             for(int j = 0; j < 7; j++){
                 MainFrame.add(drawCalendar.getClickableDate(i, j));
+                drawCalendar.getClickableDate(i, j).setActionCommand(drawCalendar.getClickableDate(i,j).getText());
+                drawCalendar.getClickableDate(i, j).addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        currentDate = String.valueOf(CalendarForShow.getCurrentYear()) + String.format("%02d", CalendarForShow.getCurrentMonth()) + String.format("%02d", Integer.parseInt(e.getActionCommand()));
+                        try{
+                            ToDoList.setText(record.ReadMemo(currentDate));
+                        } catch (IOException exception){
+                            System.out.println("Error");
+                        }
+
+                    }
+                });
             }
         }
 
